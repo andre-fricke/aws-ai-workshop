@@ -1,0 +1,19 @@
+{
+  "name": "parcel-sorter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.build.json",
+    "verify:artifacts": "node scripts/verify-artifacts.mjs dist",
+    "demo": "node src/demo.ts",
+    "test": "node --test test/routing.test.mjs",
+    "demo:scenario": "node scenarios/berlin-to-hamburg/demo.ts",
+    "test:scenario": "node --test scenarios/berlin-to-hamburg/routing.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}

@@ -1,0 +1,49 @@
+name: Demo - wrong artifact path
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Deliberate scenario: the unchanged build produces app/dist, not app/build.
+# This is the single faulty path shared by verification and upload.
+env:
+  ARTIFACT_PATH: app/build
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: app
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.22.2'
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test reference routing
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Verify required build artifacts (expected failure)
+        working-directory: .
+        run: node app/scripts/verify-artifacts.mjs "$ARTIFACT_PATH"
+      - name: Upload checked build artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: parcel-sorter-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.ARTIFACT_PATH }}/
+          if-no-files-found: error
+          retention-days: 1
