@@ -1,0 +1,18 @@
+Kuratiertes Fragment aus dem tatsächlichen GitHub-Lauf (keine vollständige Logdatei):
+https://github.com/andre-fricke/aws-ai-workshop/actions/runs/42625481766/job/129188010545#step:7:29
+Commit: e7577b1ed8f7f59fe7013a6e1c08e3b606aa486c
+Schritt: Test deliberately broken routing
+
+test at test/routing-contract.mjs:17:5
+CHECK-B1: Berlin → berlin
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  actual: 'hamburg',
+  expected: 'berlin',
+
+test at test/routing-contract.mjs:17:5
+OTHER-B2: Berlin → berlin
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  actual: 'hamburg',
+  expected: 'berlin',
+
+Process completed with exit code 1.
